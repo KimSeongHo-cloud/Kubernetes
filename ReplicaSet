@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: ReplicaSet                    //종류는 레플리카셋
+metadata:
+    name: replica1                  //레플리카셋의 이름은 replica1
+spec:
+    replicas: 1                     //유지할 파드의 수는 1
+    selector:
+        matchLables:
+            type: web               //
+
+        template:
+            metadata:
+                name: pod1          //이름은 지맘대로 만들어짐
+                labels:
+                    type:web
+            sepc:
+                containers:             //위와같은 스펙의 파드를 생성시킨다.
+                -name: container
+                image: kubetm/app:v2
+                terminationGracePeridSeconds: 0
+
+
+
+레플리카셋 컨트롤러를 삭제하면 디폴트로 파드가 모두삭제
+이를 해제하기 위해서는 kubectl에 명령어를 입력하여야 한다.
+kubectl delte replicationcontrollers replication1(레플리카 이름) --cascade=false

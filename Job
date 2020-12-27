@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+    name: job-2
+spec:
+    completitions: 6
+    parallelism: 2
+    activeDeadlineSeconds: 30
+    template:
+        spce:
+            containers:
+            -name: container
+            image: kubetm
+            command: ["sh","-c" echo 'start'; sleep 20;]
+
+
+
+잡은 특정 조건에 맞춰 파드를 생성하게된다
+6라인은 총 6개의 파드를 생성
+7라인은 2개씩 파드를 생성
+8라인은 30초 뒤에 실행중인 잡을 종료한다는 뜻
+14번의 커맨드를 달아줌으로써 컨테이너의 로그를 찍는등의 활동이 가능하다.

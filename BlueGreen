@@ -1,0 +1,24 @@
+apiVersion: apps
+kind: ReplicaSet
+meatadata:
+    name: replica1
+spec:
+    replicas:2
+    selector:
+        matchLabels:
+            ver:v1
+    template:
+        metadata:
+            name: pod1
+            labels:
+                ver: v1
+            spec:
+                containers:
+
+
+
+롤링업데이트는 레플리카셋을 이용한 배포방식으로 다운타임이 없다.
+기존의 서비스에 연결된 레플리카셋(v1)과 새로운 레플리카셋(v2)를 연결 후
+서비스의 라벨을 v2로 설정하여 v1과 연결을 끊음
+다운타임 또한 없으며 v2에 문제가 있어도 v1으로 롤백이 가능함
+자원이 롤링업데이트보다 많이 든다.

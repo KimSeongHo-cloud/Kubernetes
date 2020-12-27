@@ -1,0 +1,15 @@
+apiVersion: batch/v1beta
+kind: CronJob
+metadata:
+    name: cron-job
+spec:
+    schedule: "* /1 * * *"
+    jobTemplate:
+        spec:
+            template:
+                spec:
+                    containers:
+
+
+크론이라는 스케쥴링에 맞춰서 잡을 실행한다.
+매 1분 마다 컨테이너를 생성한다.

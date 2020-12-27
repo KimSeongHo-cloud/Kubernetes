@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment            //배포용
+
+metada: 
+    name: deployment-1      //배포 이름
+spec:
+    selector:
+        matchLables:        //라벨에 맞는것이 대상자
+            type: app
+        replicas:2          //유지할 레플리카 수
+        strategy:
+            type: Recreate          //방식은 recreate
+        revisionHistoryLimit: 1     //남겨둘 이전 버전의 레플리카셋 수
+        template:
+            metadata:
+                labels:
+                    type: app
+            spec:
+                containers:
+                -name: container
+                image: kubetm/app:v1
+                terminationGracePeridSeconds: 10        //사망 후 생성 10초
+
+
+Recreate는 버전을 업그레이를 진행하면 기존의 레플리카셋(v1)의 모든 파드를 0으로 만들고
+새로운 버전의 레플리카셋(v2)를 생성하고 레플리카의 수에 맞게 파드를 찍어냄
+v1이 0이되는 순간 다운타임이 일어난다.

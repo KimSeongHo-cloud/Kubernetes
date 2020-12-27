@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metada:
+    name: deployment-2
+spec:
+    selector:
+        matchLables:
+            type: app2
+    replicas:2
+    strategy:
+        type: RollingUpdate
+    minReadySeconds: 10
+    template:
+        labels:
+            type: app2
+        spec:
+            containers:
+            -name: container
+            image: kubetm/app:v1
+        terminationGracePeridSeconds: 0 
+
+
+롤링업데이트를 사용하면 기존의 레플리카셋(v1)의 갯수를 줄여가며 새로운 
+레플리카셋(v2)를 생성하므로 다운타임이 없다. 대신 리소스의 소모량이 크다.
+또한 v1을 삭제하고 v2를 생성하는 동안 서비스는 v1과 v2 모두에 서비스를 적용할 수 있어
+누구는 v1이고 누구는 v2를 사용할 수 있다.

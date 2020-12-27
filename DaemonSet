@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+    name: daemonset-2
+spec:
+    selector:
+        matchLabels:
+            type:app
+    template:
+        metadata:
+        labels:
+            type:app
+        spec:
+            nodeSelector:
+                os: centos
+            containers:
+
+
+
+데몬셋은 특정 라벨이나, 특정 노드에만 파드를 생성, 특정 조건에 따라서 특정한
+어떤 것을 추가한다.
+필수적으로 필요한 사항들을 넣는다
+노드의 성능수집, 로그수집, 스토리지 등을 추가하는데 사용한다.
+
+노드셀렉터에 os:centos라는 조건을 걸어 os:centos라는 노드에만 데몬셋을 적용시키다.
