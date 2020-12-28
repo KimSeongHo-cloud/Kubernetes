@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: pod-preferred
+spec:
+    affinity:
+        nodeAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            -weight: 1
+                preference:
+                    matchExpressions:
+                    - {key:ch, operator: Exists}
+        containers:
+        -name: container
+        image: tmkube
+        terminationGracePeridSeconds: 0
+
+
+preferred옵션은 매치라벨을 우선으로 하고 없으면 여분이 많이 남는 파드에 배치를 실시한다.
+우선은 키가 ch인것을 먼저 찾고 없으면 남는거에 배치한다.

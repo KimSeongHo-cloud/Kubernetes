@@ -1,0 +1,41 @@
+Affinity는 특정 노드에 파드를 같이 배치를 시키는데 사용한다. 
+
+web1 pod
+
+apiVersion: v1
+kind: pod
+metadata:
+    name: web1
+    labels:
+        type: web1
+    spec: 
+        nodeSelector:
+            a-team: '1'
+        containers:
+        -name: container
+        image: kubectl
+        terminationGracePeridSeconds:0
+
+web1이라는 파드를 노드셀렉터에 의해 a-team 1에 배치시켰다
+affinity를 사용하여 web1을 따라가는 파드를 생성해보장
+
+apiVersion: v1
+kind: pod
+metadata:
+    name: server1
+spec:
+    affinity:
+        podAffinity:
+            requireDuringSchedulingIgnoredDuringExecutuon:
+            -topologyKey: a-team
+            labelSelector:
+                matchExpressions:
+                -   {key: type, operator: IN, values: [web1]}
+        containers:
+        -name: container
+        image: tmkube
+        terminationGracePeridSeconds:0
+
+과 같이 하면 32번의 라인에 의해 type:web1과 매칭이 되어 따라가서 파드가 생성되게 된다.
+30번의 토폴로지는 a-team에만 들어가며 b-team이 있으면 안들어간다.
+require옵션이 있으니 그거에만 맞춰 들어가겠다.

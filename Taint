@@ -1,0 +1,14 @@
+taint를 노드에 적용시키는 방법은
+
+kubectl taint nodes k8s-node1(노드이름) hw=gpu:NoSchedule(키=밸류:옵션)
+
+형식으로 taint를 선언한다.
+
+node에 taint가 선언되면 특정 Toleration이 선언된 파드만 생성이 가능하고 
+나머지는 접근이 불가하다.
+
+taint의 옵션에 NoExcute옵션이 있는데 
+NoExcute옵션이 달리면 그 전에 생성된 파드, 즉 taint 조건에 맞지 않는 파드는 모두 삭제가 된다.
+
+kubectl taint nodes k8s-node2 out-of-disk=True:NoExecute
+

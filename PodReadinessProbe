@@ -1,0 +1,46 @@
+ReadinessProbe와 LiveinessProbe는 Pod의 헬스체크, 상태를 점검하는 옵션이다.
+
+ReadinessProbe는 Pod의 상태, 서비스가 제대로 작동하는지 체크하는 것이고
+LiveinessProbe는 Pod가 살아있는지 체크하는 것이다 사용방법은 비슷하다.
+3가지 방법 중 한 가지는 반드시 포함을 해야하며
+CommandProbe(exec), HttpProbe(HttpGet), TcpProbe(tcpSocket) 이 방법이 있다.
+exec는 커맨듣를 날려 만족을 하면 패스
+Http는 Get메시지를 날려 200~300번의 답이 오면 패스
+Tcp는 Tcp연결이 되면 패스이다.
+
+
+apiVersion: v1
+kind: Pod
+metadata :
+    name: Pod-readiness-exec
+    labels :
+        app : readiness
+spec:
+    containers:
+    -name : Readiness
+    image : kubectl
+    ports:
+    - containerPort: 8080
+    readinessProbe:
+        exec:
+            command: ["cat". "/readiness/ready.txt"]
+            initialDelaySeconds: 5 
+            periodSeconds: 10
+            successThreshold: 3
+        volumeMounts:
+        -name: host-path
+         mountPath: /readiness
+        volumes:
+        -name : host-path
+        hostPath:
+            path: /tmp/readiness
+            type: Directory
+        terminationGracePeriodSeconds: 0
+
+24번이 readinessProbe의 설정이다.
+exec 커맨드의 명령을 날려 답이 오면 패스이다.
+27번 라인은 시작하기 전에 5초의 딜레이를 가지며
+28번은 매 10초마다 상태를 체크하고
+29번은 3번을 성공하면 패스를 정상으로 판단한다.
+35번은 호스트패스를 선언하여 /readiness 에 볼륨을 설정하고
+이를 같은 노드에서 파드간 연결을 한다.

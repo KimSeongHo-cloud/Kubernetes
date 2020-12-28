@@ -1,0 +1,31 @@
+노드 어피니티는 노드셀렉터의 단점을 보완한 방법이다. 노드셀렉터의 경우 라벨의 매칭이
+이루어지지 않으면 파드가 안들어가지만 
+노드 어피니티는 남는 다른 곳에 파드를 배치시킨다.
+
+이 또한 옵션이 있으며
+require와 preferred옵션이 있다.
+
+MatchExpresssions
+
+apiVersion: v1
+kind: Pod
+metadata:
+    name: pod-match-expressinos
+spec:
+    affinity
+        nodeAffinity:
+            requireDuringSchedulingOgnoredDuringExecutuon:
+                nodeSelectorTerms:
+                -matchExpressions:
+                    - {key:kr, operator: Exists}
+        containers:
+        -name: container
+        image: tmkube
+        terminationGracePeridSeconds: 0
+
+노드어피니티에 파드를 배치 시킬 수 있다.
+17라인의 require는 반드시 matchExpressions가 동일한 노드에만 배치가 된다.
+kr이라는 키를 가진 노드에만 파드가 올라갈 수 있다.
+
+노드에 라벨을 다는 방법은
+kubectl label nodes k8s-node1(node명) kr=az-1(키=벨류)
